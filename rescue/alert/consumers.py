@@ -1,3 +1,6 @@
+from .models import Alert
+from .utils import calculate_nearest_department 
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
@@ -24,7 +27,12 @@ class AlertConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         alert_info = json.loads(text_data)
-        
+    
+        #getting user location 
+        user_location = data['location']
+        # Implement logic to find the nearest department based on user_location
+        nearest_department = calculate_nearest_department(user_location)
+
         await self.channel_layer.group_send(
             self.alertGroup,
             {
